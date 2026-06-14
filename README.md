@@ -1,6 +1,6 @@
-ATHENA GRUP PROJECK  parfume store static website
+ATHENA GRUP PROJECK for make parfume store static website
 
-- Contributors for this website
+- Contributors for this website:
 -  : Aksha
 -  : Dandi
 -  ---------
