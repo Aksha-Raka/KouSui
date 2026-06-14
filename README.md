@@ -1,4 +1,4 @@
-KouSui is a parfume store static website
+ATHENA GRUP PROJECK  parfume store static website
 
 - Contributors for this website
 -  : Aksha
