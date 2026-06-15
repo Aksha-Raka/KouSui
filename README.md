@@ -1,9 +1,5 @@
-- Contributors for this website:
--  : Aksha
--  : Dandi
--  ---------
 KouSui x ATHENA
-Static perfume e-commerce website.
+Static parfume e-commerce website.
 
 Features:
 - : Product Catalog
@@ -11,3 +7,8 @@ Features:
 - : Select All Cart
 - : Dummy Checkout
 - : Responsive Design
+
+- Contributors for this website:
+-  : Aksha
+-  : Dandi
+-  ---------
