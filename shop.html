@@ -1,2 +1,81 @@
-<!-- intentionally left empty to avoid merge conflicts -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KOUSUI SHOP</title>
 
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="home.css">
+</head>
+<body>
+    <h1>WELCOME TO SHOP KOUSUI</h1>
+    
+    <bottton><a href="checkout.html">Checkout</a></bottton>
+    
+
+    <div style="display: flex; gap: 40px;">
+        <div style="flex: 1;">
+            <h2>1.SHOP</h2>
+            <p>PARFUM A - CAD 39.99</p>
+            <input type="number" id="q0" value="0" min="0" max="39" step="1" oniput="update"()">
+
+            <p>PARFUM MIX B - CAD 49.00</p>
+            <input type="number" id="q0" value="0" min="0" max="28" step="1" oniput="update"()">
+
+            <p>PARFUM ANJAY S - CAD 3.000 </p>
+            <input type="number" id="q0" value="0" min="0" max="39" step="1" oniput="update"()">
+
+            <p>PARFUM AKSHA F - CAD 1.000</p>
+            <input type="number" id="q0" value="0" min="0" max="39" step="1" oniput="update"()">
+
+            <p>PARFUM DANDI A - CAD 50.000</p>
+            <input type="number" id="q0" value="0" min="0" max="39" step="1" oniput="update"()">
+
+
+
+            <p>PROMO CODE</p>
+            <input type="text" placeholder="Enter code">
+        </div>
+
+        <div style="flex: 1;">
+            <h2>SUMMARY</h2>
+            <p>SUBTOTAL: <span id="subtotal">CAD 0.00</span></p>
+            <p>SHIPPING & HANDLING: FREE</p>
+            <p>TAXES: <span id="taxes">CAD 0.00</span></p>
+            <p>TOTAL: <span id="total">CAD 0.00</span></p>
+        </div>
+    </div>
+
+  <script>
+    const prices = [39.99, 54.99, 74.99];
+    const TAX = 0.13;
+
+    function update() {
+      let subtotal = 0;
+      for (let i = 0; i < 3; i++) {
+        const inp = document.getElementById('q' + i);
+        let v = parseInt(inp.value) || 0;
+        v = Math.min(40, Math.max(0, v));
+        inp.value = v;
+        subtotal += v * prices[i];
+      }
+      const taxes = subtotal * TAX;
+      document.getElementById('subtotal').textContent = 'CAD ' + subtotal.toFixed(2);
+      document.getElementById('taxes').textContent   = 'CAD ' + taxes.toFixed(2);
+      document.getElementById('total').textContent   = 'CAD ' + (subtotal + taxes).toFixed(2);
+    }
+
+    update();
+  </script>
+
+</body>
+</html>
+    
+
+        
+    </script>
+
+    <script src="main.js"></script>
+</body>
+</html>
