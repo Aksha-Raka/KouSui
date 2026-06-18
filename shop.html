@@ -1,81 +1,600 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KOUSUI SHOP</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="stylesheet" href="main.css">
-    <link rel="stylesheet" href="home.css">
-</head>
-<body>
-    <h1>WELCOME TO SHOP KOUSUI</h1>
-    
-    <bottton><a href="checkout.html">Checkout</a></bottton>
-    
+  <title>Shop Kousui</title>
 
-    <div style="display: flex; gap: 40px;">
-        <div style="flex: 1;">
-            <h2>1.SHOP</h2>
-            <p>PARFUM A - CAD 39.99</p>
-            <input type="number" id="q0" value="0" min="0" max="39" step="1" oniput="update"()">
-
-            <p>PARFUM MIX B - CAD 49.00</p>
-            <input type="number" id="q0" value="0" min="0" max="28" step="1" oniput="update"()">
-
-            <p>PARFUM ANJAY S - CAD 3.000 </p>
-            <input type="number" id="q0" value="0" min="0" max="39" step="1" oniput="update"()">
-
-            <p>PARFUM AKSHA F - CAD 1.000</p>
-            <input type="number" id="q0" value="0" min="0" max="39" step="1" oniput="update"()">
-
-            <p>PARFUM DANDI A - CAD 50.000</p>
-            <input type="number" id="q0" value="0" min="0" max="39" step="1" oniput="update"()">
-
-
-
-            <p>PROMO CODE</p>
-            <input type="text" placeholder="Enter code">
-        </div>
-
-        <div style="flex: 1;">
-            <h2>SUMMARY</h2>
-            <p>SUBTOTAL: <span id="subtotal">CAD 0.00</span></p>
-            <p>SHIPPING & HANDLING: FREE</p>
-            <p>TAXES: <span id="taxes">CAD 0.00</span></p>
-            <p>TOTAL: <span id="total">CAD 0.00</span></p>
-        </div>
-    </div>
-
-  <script>
-    const prices = [39.99, 54.99, 74.99];
-    const TAX = 0.13;
-
-    function update() {
-      let subtotal = 0;
-      for (let i = 0; i < 3; i++) {
-        const inp = document.getElementById('q' + i);
-        let v = parseInt(inp.value) || 0;
-        v = Math.min(40, Math.max(0, v));
-        inp.value = v;
-        subtotal += v * prices[i];
-      }
-      const taxes = subtotal * TAX;
-      document.getElementById('subtotal').textContent = 'CAD ' + subtotal.toFixed(2);
-      document.getElementById('taxes').textContent   = 'CAD ' + taxes.toFixed(2);
-      document.getElementById('total').textContent   = 'CAD ' + (subtotal + taxes).toFixed(2);
+  
+  <link rel="stylesheet" href="main.css">
+  <link rel="stylesheet" href="home.css">
+  <!-- =====================================================
+       CSS — Tampilan / Gaya Visual
+       Ubah warna, font, ukuran di sini
+  ====================================================== -->
+  <style>
+    /* --- Reset dasar & font --- */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
-    update();
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      color: #222;
+      padding: 2rem;
+    }
+
+    /* --- Judul toko --- */
+    h1 {
+      font-size: 2rem;
+      font-weight: 900;
+      margin-bottom: 0.5rem;
+      letter-spacing: 1px;
+    }
+
+    /* Link checkout di atas */
+    .top-checkout-link {
+      color: #6b6bff;
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+      display: inline-block;
+    }
+
+    /* --- Layout utama: kiri (produk) dan kanan (summary) --- */
+    .shop-layout {
+      display: grid;
+      grid-template-columns: 1fr 320px; /* 2 kolom: produk | summary */
+      gap: 2rem;
+      align-items: start;
+    }
+
+    /* Di layar kecil (HP), jadikan 1 kolom */
+    @media (max-width: 640px) {
+      .shop-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* --- Judul bagian (1.SHOP, SUMMARY) --- */
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+
+    /* --- Satu baris produk --- */
+    .product-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .product-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .product-price {
+      font-size: 0.85rem;
+      color: #666;
+      margin-top: 2px;
+    }
+
+    /* --- Kontrol qty: tombol - angka + --- */
+    .qty-ctrl {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .qty-btn {
+      width: 32px;
+      height: 32px;
+      border: 1px solid #ccc;
+      background: #fff;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s;
+    }
+
+    .qty-btn:hover {
+      background: #eee;
+    }
+
+    .qty-num {
+      font-size: 1rem;
+      font-weight: 700;
+      min-width: 24px;
+      text-align: center;
+    }
+
+    /* --- Bagian promo code --- */
+    .promo-section {
+      margin-top: 1.5rem;
+    }
+
+    .promo-label {
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .promo-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .promo-row input {
+      flex: 1;
+      padding: 8px 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+
+    .promo-row button {
+      padding: 8px 16px;
+      background: #222;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .promo-row button:hover {
+      background: #444;
+    }
+
+    .promo-msg {
+      font-size: 0.82rem;
+      margin-top: 6px;
+    }
+
+    .promo-ok  { color: #16a34a; } /* hijau = sukses */
+    .promo-err { color: #dc2626; } /* merah = error  */
+
+    /* --- Kartu Summary (kanan) --- */
+    .summary-card {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 1.25rem;
+      position: sticky;
+      top: 1rem;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      padding: 6px 0;
+      color: #555;
+    }
+
+    /* Baris diskon — warna hijau */
+    .summary-row.discount {
+      color: #16a34a;
+      font-weight: 600;
+    }
+
+    /* Badge kecil di samping label diskon */
+    .disc-badge {
+      background: #dcfce7;
+      color: #15803d;
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: 99px;
+      margin-left: 6px;
+    }
+
+    /* Baris total akhir */
+    .summary-total {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1rem;
+      font-weight: 700;
+      padding: 10px 0 0;
+      border-top: 1px solid #ddd;
+      margin-top: 4px;
+    }
+
+    /* Tombol checkout besar */
+    .checkout-btn {
+      width: 100%;
+      margin-top: 1rem;
+      padding: 12px;
+      background: #222;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: 0.03em;
+    }
+
+    .checkout-btn:hover {
+      background: #444;
+    }
+
+    /* Tombol back di bawah */
+    .back-btn {
+      margin-top: 2rem;
+      padding: 6px 14px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background: #fff;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- JUDUL TOKO -->
+  <h1>WELCOME TO SHOP KOUSUI</h1>
+  <a class="top-checkout-link" href="#">Checkout</a>
+
+  <!-- LAYOUT UTAMA -->
+  <div class="shop-layout">
+
+    <!-- ===== KOLOM KIRI: DAFTAR PRODUK ===== -->
+    <div>
+      <p class="section-title">1. Shop</p>
+
+      <!-- Produk akan diisi otomatis oleh JavaScript (renderProducts) -->
+      <div id="product-list"></div>
+
+      <!-- PROMO CODE -->
+      <div class="promo-section">
+        <p class="promo-label">Promo Code</p>
+        <div class="promo-row">
+          <input type="text" id="promo-input" placeholder="Masukkan kode diskon..." />
+          <!-- onclick memanggil fungsi applyPromo() di JS -->
+          <button onclick="applyPromo()">Pakai</button>
+        </div>
+        <!-- Pesan sukses/error akan muncul di sini -->
+        <p class="promo-msg" id="promo-msg"></p>
+      </div>
+
+      <button class="back-btn" onclick="history.back()">back</button>
+    </div>
+
+    <!-- ===== KOLOM KANAN: SUMMARY ===== -->
+    <div class="summary-card">
+      <p class="section-title">Summary</p>
+
+      <!-- Subtotal — diupdate oleh updateSummary() -->
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <span id="s-sub">CAD 0.00</span>
+      </div>
+
+      <!-- Pengiriman — tetap gratis -->
+      <div class="summary-row">
+        <span>Shipping &amp; Handling</span>
+        <span>FREE</span>
+      </div>
+
+      <!-- Pajak — diupdate oleh updateSummary() -->
+      <div class="summary-row">
+        <span>Taxes (13%)</span>
+        <span id="s-tax">CAD 0.00</span>
+      </div>
+
+      <!-- Baris diskon — disembunyikan dulu, muncul kalau ada promo aktif -->
+      <div class="summary-row discount" id="discount-row" style="display: none;">
+        <span>
+          Diskon
+          <span class="disc-badge" id="disc-badge"></span>
+        </span>
+        <span id="s-disc">-CAD 0.00</span>
+      </div>
+
+      <!-- Total akhir — diupdate oleh updateSummary() -->
+      <div class="summary-total">
+        <span>Total</span>
+        <span id="s-total">CAD 0.00</span>
+      </div>
+
+      <!-- Tombol checkout -->
+      <button class="checkout-btn" onclick="checkout()">Checkout →</button>
+    </div>
+
+  </div><!-- end .shop-layout -->
+
+
+  <!-- =====================================================
+       JAVASCRIPT — Logika / Cara Kerja Toko
+       Semua penjelasan ada di komentar tiap bagian
+  ====================================================== -->
+  <script>
+
+    // ===========================================================
+    //  BAGIAN 1: DATA PRODUK
+    //  Tambah / ubah produk di sini.
+    //  Setiap produk: { id, name, price }
+    // ===========================================================
+
+    const products = [
+      { id: "a", name: "PARFUM A",       price: 39.99 },
+      { id: "b", name: "PARFUM MIX B",   price: 49.00 },
+      { id: "c", name: "PARFUM ANJAY S", price: 3.00  },
+      { id: "d", name: "PARFUM AKSHA F", price: 1.00  },
+      { id: "e", name: "PARFUM DANDI A", price: 50.00 },
+    ];
+
+
+    // ===========================================================
+    //  BAGIAN 2: DATA KODE PROMO
+    //
+    //  type "percent" = diskon persentase (%)
+    //  type "fixed"   = potongan nominal langsung (CAD)
+    //
+    //  Cara tambah kode baru:
+    //  "KODEMU": { type: "percent", value: 15, label: "15% off" }
+    // ===========================================================
+
+    const promoCodes = {
+      "KOUSUI10": { type: "percent", value: 10, label: "10% off"   },
+      "SAVE20":   { type: "percent", value: 20, label: "20% off"   },
+      "FLAT5":    { type: "fixed",   value: 5,  label: "CAD 5 off" },
+    };
+
+
+    // ===========================================================
+    //  BAGIAN 3: STATE (DATA YANG BERUBAH SAAT DIPAKAI)
+    //
+    //  quantities  = objek yang menyimpan qty setiap produk
+    //                contoh: { a: 2, b: 0, c: 1, d: 0, e: 3 }
+    //  activePromo = kode promo yang sedang aktif (null = tidak ada)
+    //  TAX_RATE    = persentase pajak (0.13 = 13%)
+    // ===========================================================
+
+    let quantities  = {};
+    let activePromo = null;
+    const MAX_QTY = 31;
+
+    // Inisialisasi semua qty ke 0
+    products.forEach(function(p) {
+      quantities[p.id] = 0;
+    });
+
+
+    // ===========================================================
+    //  BAGIAN 4: RENDER DAFTAR PRODUK
+    //
+    //  Fungsi ini membuat HTML daftar produk secara otomatis
+    //  dari array products di atas, lalu memasukkannya ke
+    //  elemen <div id="product-list"> di HTML.
+    //
+    //  Dipanggil 1x saat halaman pertama dibuka.
+    // ===========================================================
+
+    function renderProducts() {
+      var list = document.getElementById("product-list");
+
+      list.innerHTML = products.map(function(p) {
+        return (
+          '<div class="product-row">' +
+            '<div>' +
+              '<p class="product-name">' + p.name + '</p>' +
+              '<p class="product-price">CAD ' + p.price.toFixed(2) + ' / botol</p>' +
+            '</div>' +
+            '<div class="qty-ctrl">' +
+              '<button class="qty-btn" onclick="changeQty(\'' + p.id + '\', -1)">&#8722;</button>' +
+              '<span class="qty-num" id="qty-' + p.id + '">0</span>' +
+              '<button class="qty-btn" onclick="changeQty(\'' + p.id + '\', 1)">+</button>' +
+            '</div>' +
+          '</div>'
+        );
+      }).join("");
+    }
+
+
+    // ==================================================================================================
+    //  BAGIAN 5: UBAH QUANTITY PRODUK
+    //
+    //  Dipanggil setiap kali tombol + atau - diklik.
+    //
+    //  id    = id produk yang diklik ("a", "b", dll)
+    //  delta = +1 untuk tambah, -1 untuk kurang
+    //
+    //  Math.max(0, ...) = pastikan qty tidak pernah minus
+    // ===========================================================
+
+    function changeQty(id, delta) {
+      // Tambah atau kurangi, tapi minimal 0
+      var newQty = quantities[id] + delta;
+      if (newQty > MAX_QTY) {
+        alert("Maksimal pembelian " + MAX_QTY + " botol per produk!");
+        return; // berhenti, tidak update qty
+      }
+      quantities[id] = Math.max(0, newQty);
+
+      // Perbarui angka yang terlihat di layar
+      document.getElementById("qty-" + id).textContent = quantities[id];
+
+      // Hitung ulang semua total di summary
+      updateSummary();
+    }
+
+
+    // ===========================================================
+    //  BAGIAN 6: HITUNG & UPDATE SUMMARY
+    //
+    //  Ini fungsi paling penting. Dipanggil setiap ada perubahan.
+    //
+    //  Urutan kalkulasi:
+    //    1. Subtotal = jumlah (harga × qty) semua produk
+    //    2. Pajak    = subtotal × TAX_RATE
+    //    3. Diskon   = dihitung dari tipe promo (persen/nominal)
+    //    4. Total    = subtotal + pajak - diskon
+    // ===========================================================
+
+    function updateSummary() {
+
+      // LANGKAH 1: Subtotal
+      // Loop semua produk dan jumlahkan (harga × qty)
+      var subtotal = 0;
+      products.forEach(function(p) {
+        subtotal = subtotal + (p.price * quantities[p.id]);
+      });
+      // Contoh: Parfum A (39.99) × 2 = 79.98
+      //         Parfum Mix B (49.00) × 1 = 49.00
+      //         subtotal = 79.98 + 49.00 = 128.98
+
+      // LANGKAH 2: Pajak
+      var tax = subtotal * TAX_RATE;
+      // Contoh: 128.98 × 0.13 = 16.77
+
+      // LANGKAH 3: Diskon (hanya jika ada promo aktif)
+      var discount = 0;
+
+      if (activePromo !== null) {
+        var promo = promoCodes[activePromo];
+
+        if (promo.type === "percent") {
+          // Diskon persen: subtotal dikali nilai persen
+          // Contoh SAVE20: 128.98 × (20/100) = 25.80
+          discount = subtotal * (promo.value / 100);
+
+        } else if (promo.type === "fixed") {
+          // Diskon nominal: langsung dikurangi sejumlah nilai
+          // Math.min memastikan diskon tidak melebihi subtotal
+          // Contoh FLAT5: diskon = 5 (atau subtotal jika subtotal < 5)
+          discount = Math.min(promo.value, subtotal);
+        }
+      }
+
+      // LANGKAH 4: Total Akhir
+      var total = subtotal + tax - discount;
+      if (total < 0) { total = 0; } // jaga-jaga total tidak minus
+
+      // UPDATE TAMPILAN — isi elemen HTML dengan nilai yang sudah dihitung
+      document.getElementById("s-sub").textContent   = "CAD " + subtotal.toFixed(2);
+      document.getElementById("s-tax").textContent   = "CAD " + tax.toFixed(2);
+      document.getElementById("s-total").textContent = "CAD " + total.toFixed(2);
+
+      // Tampilkan atau sembunyikan baris diskon
+      var discountRow = document.getElementById("discount-row");
+
+      if (discount > 0) {
+        // Ada diskon: tampilkan baris diskon
+        discountRow.style.display               = "flex";
+        document.getElementById("s-disc").textContent     = "-CAD " + discount.toFixed(2);
+        document.getElementById("disc-badge").textContent = promoCodes[activePromo].label;
+      } else {
+        // Tidak ada diskon: sembunyikan baris diskon
+        discountRow.style.display = "none";
+      }
+    }
+
+
+    // ===========================================================
+    //  BAGIAN 7: APPLY PROMO CODE
+    //
+    //  Dipanggil saat tombol "Pakai" diklik.
+    //
+    //  Cara kerja:
+    //    1. Ambil teks dari input
+    //    2. Ubah ke huruf BESAR (supaya tidak case-sensitive)
+    //    3. Cek apakah kode ada di daftar promoCodes
+    //    4. Kalau ada → aktifkan promo, tampilkan pesan hijau
+    //       Kalau tidak → reset promo, tampilkan pesan merah
+    //    5. Panggil updateSummary() untuk hitung ulang
+    // ===========================================================
+
+    function applyPromo() {
+      // .trim() = hapus spasi di awal/akhir
+      // .toUpperCase() = jadikan huruf besar semua
+      var code = document.getElementById("promo-input").value.trim().toUpperCase();
+      var msg  = document.getElementById("promo-msg");
+
+      // Kalau input kosong, hapus promo aktif
+      if (code === "") {
+        activePromo     = null;
+        msg.textContent = "";
+        updateSummary();
+        return; // keluar dari fungsi, tidak lanjut ke bawah
+      }
+
+      // Cek apakah kode ada di daftar
+      if (promoCodes[code]) {
+        // VALID: aktifkan promo
+        activePromo     = code;
+        msg.className   = "promo-msg promo-ok";
+        msg.textContent = "✓ Kode berhasil dipakai! " + promoCodes[code].label;
+      } else {
+        // TIDAK VALID: hapus promo
+        activePromo     = null;
+        msg.className   = "promo-msg promo-err";
+        msg.textContent = "✗ Kode tidak valid atau sudah kadaluarsa";
+      }
+
+      // Hitung ulang total dengan kondisi promo baru
+      updateSummary();
+    }
+
+
+    // ===========================================================
+    //  BAGIAN 8: CHECKOUT
+    //
+    //  Dipanggil saat tombol "Checkout" diklik.
+    //  Mengecek apakah ada produk dipilih, lalu tampilkan
+    //  ringkasan pesanan.
+    // ===========================================================
+
+
+        function checkout() {
+      var selectedItems = products.filter(function(p) {
+        return quantities[p.id] > 0;
+      });
+
+      if (selectedItems.length === 0) {
+        alert("Belum ada produk yang dipilih!");
+        return;
+      }
+
+      var orderData = selectedItems.map(function(p) {
+        return p.name + " x" + quantities[p.id];
+      }).join(", ");
+
+      var total = document.getElementById("s-total").textContent;
+
+      // Kirim ke checkout.html lewat URL
+      window.location.href = "checkout.html?order=" 
+        + encodeURIComponent(orderData) 
+        + "&total=" +
+        + encodeURIComponent(total);
+    }
+
+    // ===========================================================
+    //  BAGIAN 9: INISIALISASI
+    //  2 baris ini dijalankan pertama kali saat halaman dimuat.
+    //  renderProducts() → tampilkan daftar produk
+    //  updateSummary()  → pastikan summary tampil angka 0
+    // ===========================================================
+
+    renderProducts();
+    updateSummary();
+
   </script>
-
-</body>
-</html>
-    
-
-        
-    </script>
-
     <script src="main.js"></script>
 </body>
 </html>

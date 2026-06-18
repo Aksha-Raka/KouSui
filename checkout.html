@@ -1,40 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KOUSUI</title>
-
-    <link rel="stylesheet" href="main.css">
-    <link rel="stylesheet" href="home.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KOUSUI</title>
+  <link rel="stylesheet" href="main.css">
+  <link rel="stylesheet" href="home.css">
 </head>
 <body>
-    <div style="display: flex; gap: 40px;">
-        <div style="flex: 1;">
-            <h2>1.SHIPPING</h2>
-            <p>Firs Nama*</p>
-            <input type="text">
-            <p>Last Name*</p>
-            <input type="text">
-            <p>Postal Code*</p>
-            <input type="text">
-            <p>Enter your country*</p>
-            <input type="text">
 
-        </div>
+  <!-- Tempat tampilkan data pesanan -->
+  <h2>Ringkasan Pesanan</h2>
+  <p id="order-detail"></p>
+  <p id="order-total"></p>
 
-        <div style="flex: 1;">
-            <h2>SUMMARY</h2>
-            <p>SUBTOTAL: CAD 219.90</p>
-            <p>SHIPPING & HANDLING; FREE</p>
-            <p>TAXES: CAD 31.50</p>
-            <p>TOTAL: CAD 241.50</p>
-        </div>
+  <button><a href="index.html">back</a></button>
 
-    </div>
+  <!-- Script di paling bawah, sebelum </body> -->
+  <script src="main.js"></script>
 
+  <script>
+    // Baca data yang dikirim dari cart/shop
+    var params = new URLSearchParams(window.location.search);
+    var order  = params.get("order");
+    var total  = params.get("total");
 
-
-    <script src="main.js"></script>
+    // Tampilkan ke halaman
+    document.getElementById("order-detail").textContent = order;
+    document.getElementById("order-total").textContent  = total;
+  </script>
+ 
+  <button>BUY</button>
+  <button><a href="index.html">BACK</a></button>
 </body>
 </html>
