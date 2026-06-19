@@ -368,7 +368,8 @@
 
     let quantities  = {};
     let activePromo = null;
-    const MAX_QTY = 31;
+    const  MAX_QTY = 24;
+    const TAX_RATE = 0.13;
 
     // Inisialisasi semua qty ke 0
     products.forEach(function(p) {
@@ -578,11 +579,12 @@
       var total = document.getElementById("s-total").textContent;
 
       // Kirim ke checkout.html lewat URL
-      window.location.href = "checkout.html?order=" 
-        + encodeURIComponent(orderData) 
-        + "&total=" +
-        + encodeURIComponent(total);
-    }
+       window.location.href =
+    "checkout.html?order=" +
+    encodeURIComponent(orderData) +
+    "&total=" +
+    encodeURIComponent(total);
+      }
 
     // ===========================================================
     //  BAGIAN 9: INISIALISASI
